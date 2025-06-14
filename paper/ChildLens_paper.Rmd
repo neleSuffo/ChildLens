@@ -5,8 +5,6 @@ author:
   - name: "Nele-Pauline Suffo"
     affiliation: '1'
     corresponding: true
-    address: "Universitätsallee 1, 21335 Lüneburg"
-    email: "nele.suffo@leuphana.de"
   - name: "Pierre-Etienne Martin"
     affiliation: '2'
     corresponding: false
@@ -26,11 +24,14 @@ author:
     address: "Universitätsallee 1, 21335 Lüneburg"
     email: "manuel.bohn@leuphana.de"
 
+authornote: |
+  Correspondence concerning this article should be addressed to Nele-Pauline Suffo, Universitätsallee 1, 21335 Lüneburg, Germany. E-mail: nele.suffo@leuphana.de. Phone: +49 4131 677-1905.
+  
 affiliation:
   - id: '1'
-    institution: "Institute of Psychology in Education, Leuphana University Lüneburg"
+    institution: "Institute of Psychology in Education, Leuphana University Lüneburg, Universitätsallee 1, 21335 Lüneburg, Germany"
   - id: '2'
-    institution: "Max Planck Institute for Evolutionary Anthropology"
+    institution: "Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Deutscher Platz 6, Leipzig, 04103, Germany"
     
 abstract: |
   We present ChildLens, an egocentric video and audio dataset capturing naturalistic everyday experiences in in children aged 3–5 years and including detailed activity labels. A total of 106 hours of experiences were recorded from 61 children in their home environment using a 140° wide-lens camera equipped with a microphone embedded in a child-friendly vest. Annotations include five location classes and 14 activity classes, covering audio-only, video-only, and multimodal activities. Captured through a vest equipped with an embedded camera, ChildLens provides a rich resource for analyzing children’s daily interactions and behaviors. We provide an overview of the dataset, the collection process, and the labeling strategy. Additionally, we present benchmark performance of two state-of-the-art models on the dataset: the Boundary-Matching Network for temporal activity localization and the Voice-Type Classifier for detecting and classifying speech in audio. Finally, we analyze the dataset specifications and their influence on model performance. The ChildLens dataset will be freely available for research purposes via an institutional repository (listed on the [ChildLens website](https://www.eva.mpg.de/comparative-cultural-psychology/technical-development/childlens/)). It provides rich data to advance computer vision and audio analysis techniques and thereby removes a critical obstacle for the study of the context in which children develop.
@@ -107,7 +108,7 @@ knitr::opts_chunk$set(echo = F, warning = F, message = F)
 
 total_num_videos = 343
 annotation_progress_num_videos = 161
-annotation_progress <- annotation_progress_num_videos / total_num_videos * 100
+annotation_progress <- round(annotation_progress_num_videos / total_num_videos * 100)
 data <- read_csv2("data/ChildLens_data_sheet.csv")
 subject_infos <- read_csv2("data/ChildLens_subjects.csv")
 subject_infos <- subject_infos %>%
@@ -165,8 +166,8 @@ filtered_data <- data %>%
   filter(!is.na(Date), Labeled == "yes") %>%
   mutate(Date = as.Date(Date, format = "%d.%m.%Y")) 
 
-min_minutes <- min(unique_data$Minutes_per_ID[unique_data$Minutes_per_ID > 0], na.rm = TRUE)
-max_minutes <- max(unique_data$Minutes_per_ID, na.rm = TRUE)
+min_minutes <- round(min(unique_data$Minutes_per_ID[unique_data$Minutes_per_ID > 0], na.rm = TRUE))
+max_minutes <- round(max(unique_data$Minutes_per_ID, na.rm = TRUE))
 sum_minutes <- sum(unique_data$Minutes_per_ID, na.rm = TRUE)
 mean_minutes <- mean(unique_data$Minutes_per_ID, na.rm = TRUE)
 sd_minutes <- sd(unique_data$Minutes_per_ID, na.rm = TRUE)
@@ -211,7 +212,7 @@ In order to obtain a decent coverage for the different activity classes we plann
 - Child is invited to play with toys with someone else (adult or child)
 - Child is invited to draw/craft something
 
-```{r camera-superannotate-activity-classes, echo=FALSE, dpi=600, fig.align='center', fig.cap="\\textbf{A} – Vest with the embedded camera worn by the children, \\textbf{B} – Collage of 9 screenshots showing activities (top left to bottom right): crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play., \\textbf{C} – Activity classes in the ChildLens dataset."}
+```{r camera-superannotate-activity-classes, echo=FALSE, dpi=600, fig.align='center', fig.cap="\\textbf{A} – Vest with the embedded camera worn by the children, \\textbf{B} – Collage of 9 screenshots showing activities (top left to bottom right): crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play, \\textbf{C} – Activity classes in the ChildLens dataset."}
 img1 <- ggdraw() + draw_image("images/camera_worn_close.png", scale = 0.8)
 img2 <- ggdraw() + draw_image("images/activities_snippets.png", scale = 0.8)
 img3 <- ggdraw() + draw_image("images/ChildLens_activity_classes.png", scale = 1)
@@ -402,6 +403,8 @@ The dataset provides detailed annotations for each video file. These annotations
 # Benchmark Performance
 In this chapter, we present the results of applying two model architectures to the ChildLens dataset for two specific tasks: temporal activity localization using video data and voice type classification using audio data. For temporal activity localization, we used the Boundary-Matching Network (BMN) model [@linBMNBoundaryMatchingNetwork2019], a state-of-the-art approach in this domain, and trained it from scratch on the unique activity classes in the ChildLens video data. For voice type classification, we applied and trained the Voice Type Classifier (VTC) [@lavechinOpensourceVoiceType2020], also state-of-the-art, using three different evaluation setups. Both models provide initial results and establish a benchmark for future research. 
 
+All calculations were conducted on a Linux server equipped with two NVIDIA Quadro RTX 8000 GPUs, each with 48 GB of VRAM (CUDA version 12.5, driver version 555.42.06). The server had 48 CPU cores and 187 GB of RAM. The experiments were implemented in Python 3.8.18 for Temporal Activity Localization and Python 3.8.19 for Voice Type Classification using PyTorch (version .4.1+cu121 12.1), MMCV (version 2.2.0), and MMAction2 (version 1.2.0). 
+
 ## Temporal Activity Localization
 The BMN generates action proposals by predicting activity start and end boundaries and classifying these proposals into activity classes. The architecture consists of two main components: (1) a proposal generation network, which identifies candidate proposals, and (2) a proposal classification network, which classifies these proposals. The model prioritizes proposals with high recall and high temporal overlap with ground truth.
 BMN performance is evaluated using Average Recall (AR) and Area Under the Curve (AUC) metrics. AR is computed at various Intersection over Union (IoU) thresholds and for different Average Numbers of Proposals (AN) as AR@AN, where AN ranges from 0 to 100. AR@100 reflects recall performance with 100 proposals per video, while AUC quantifies the trade-off between recall and number of generated proposal. On the ActivityNet-1.3 test set [@heilbronActivityNetLargescaleVideo2015], BMN demonstrates effective activity localization with an AR@100 of 72.46 and an AUC of 64.47.
@@ -413,17 +416,10 @@ Our analysis highlighted a significant class imbalance in the dataset, both in t
 
 For feature extraction and model training optimization, the videos were divided into clips of 4000 frames each (correspond to approx. 2 minutes and 13 seconds). This resulted in a total of 1130 clips. However, only 995 clips had annotations, so we split these annotated clips into training, validation, and test subsets, using an 80-10-10 split. The training set was used for model optimization, the validation set guided hyperparameter tuning and overfitting prevention, and the test set was reserved for evaluating the model’s generalization ability on unseen data.
 
-### Implementation Details
-The BMN model was trained from scratch on the ChildLens dataset to predict the start and end boundaries of activity classes in the videos. The model was implemented using MMAction2, an open-source toolbox for video understanding based on PyTorch [@mmaction2contributorsOpenMMLabsNextGeneration2020]. Training took place on a Linux server with 48 cores and 187 GB of RAM. The Adam optimizer was used with a learning rate of 0.001 and a batch size of 4. To avoid overfitting, early stopping based on validation loss was applied during training.
-
-### Evaluation
-The performance of the BMN model on the ChildLens dataset, compared to its evaluation on ActivityNet-1.3, is summarized in Table \@ref(tab:bmn-results), with AR@100 and AUC reported for both datasets. Since we have far fewer activity classes than the original ActivityNet dataset, we can also consider the AR@10 value — the average recall when generating only 10 proposals — which still performs satisfactorily (AR@10 = 59.82). These results support the reliability and consistency of the ChildLens annotations. The benchmark outcomes suggest that our annotations provide a solid basis for training and evaluating temporal action proposal models.
-
 ```{r bmn-results, echo=FALSE, message=FALSE, warnings=FALSE, results='asis', eval=TRUE}
 my.data <- "Dataset           | AR@100  | AUC
             ActivityNet-1.3   | 72.46   | 64.47
             ChildLens         | 77.43   | 69.21"
-
 
 df <- read.delim(textConnection(my.data), header=FALSE, sep="|", strip.white=TRUE, stringsAsFactors=FALSE)
 
@@ -432,14 +428,32 @@ names(df) <- unname(as.list(df[1,]))
 df <- df[-1,]  # Remove the first row with column names
 row.names(df) <- NULL
 
+# Identify the maximum value for each numeric column
+numeric_cols <- c("AR@100", "AUC")
+max_values <- apply(df[numeric_cols], 2, max)
+
+# Bold the highest values in each numeric column
+for (col in numeric_cols) {
+  df[[col]] <- ifelse(as.numeric(df[[col]]) == max_values[col], 
+                      paste0("\\textbf{", df[[col]], "}"), 
+                      df[[col]])
+}
 
 # Print the updated table
 apa_table(
   df,
-  caption = "Comparison of BMN performance on the ActivityNet-1.3 dataset (used for model evaluation) and the ChildLens dataset, highlighting the Average Recall for 100 proposals (AR@100) and the Area Under the Curve (AUC).",
-  escape = TRUE
+  caption = "BMN performance on ActivityNet-1.3 and ChildLens datasets, showing Average Recall for 100 proposals (AR@100) and Area Under the Curve (AUC).",
+  escape = FALSE, # Allow LaTeX commands like \textbf
+  align = c("p{6cm}", "c", "c"), # p{} for Dataset, c for centered numeric columns
+  note = "Values are reported as percentages.",
 )
 ```
+
+### Implementation Details
+The BMN model was trained from scratch on the ChildLens dataset to predict the start and end boundaries of activity classes in the videos. The model was implemented using MMAction2, an open-source toolbox for video understanding based on PyTorch [@mmaction2contributorsOpenMMLabsNextGeneration2020]. The Adam optimizer was used with a learning rate of 0.001 and a batch size of 4. To avoid overfitting, early stopping based on validation loss was applied during training.
+
+### Evaluation
+The performance of the BMN model on the ChildLens dataset, compared to its evaluation on ActivityNet-1.3, is summarized in Table \@ref(tab:bmn-results), with AR@100 and AUC reported for both datasets. Since we have far fewer activity classes than the original ActivityNet dataset, we can also consider the AR@10 value — the average recall when generating only 10 proposals — which still performs satisfactorily (AR@10 = 59.82). These results support the reliability and consistency of the ChildLens annotations. The benchmark outcomes suggest that our annotations provide a solid basis for training and evaluating temporal action proposal models.
 
 ## Voice Type Classification
 Voice Type Classification is the task of identifying audio utterances and assigning them to predefined classes. In line with previous work, we focus on the following classes: `Key Child (KCHI)`, `Other Child (CHI)`, `Male Speech (MAL)`, `Female Speech (FEM)`, and `Speech (SPEECH)` [@lavechinOpensourceVoiceType2020]. The Voice Type Classifier model (VTC) is designed to perform this task efficiently. Its architecture is composed of a SincNet layer, two bi-directional LSTMs, and three feed-forward layers. The model takes a 2-second audio chunk as input and outputs a score between 0 and 1 for each class. The VTC was originally trained on the BabyTrain dataset which includes 260 hours of child-centered audio in multiple languages from children mostly aged 0-3 years.
@@ -498,7 +512,7 @@ vtc_cl_speech <- 84.7
 
 ```
 ### Implementation Details
-We first applied the pretrained VTC model directly, using the available VTC implementation. We then fine-tuned the model on our ChildLens dataset for `r num_epochs_finetune` epochs (`r train_time_finetune` hours) on the same Linux server as the BMN model. Finally, we trained the VTC model from scratch for `r num_epochs_scratch` epochs (`r train_time_scratch` hours) using the ChildLens dataset to assess its standalone value
+We first applied the pretrained VTC model directly, using the available VTC implementation. We then fine-tuned the model on our ChildLens dataset for `r num_epochs_finetune` epochs (`r train_time_finetune` hours). Finally, we trained the VTC model from scratch for `r num_epochs_scratch` epochs (`r train_time_scratch` hours) using the ChildLens dataset to assess its standalone value
 
 ```{r vtc-results, echo=FALSE, message=FALSE, warnings=FALSE, results='asis', eval=TRUE}
 my.data <- "Dataset       | Model         | KCHI | CHI  | MAL   | FEM  | SPEECH | AVG
@@ -511,19 +525,30 @@ df <- read.delim(textConnection(my.data), header=FALSE, sep="|", strip.white=TRU
 names(df) <- unname(as.list(df[1,]))
 df <- df[-1,] 
 row.names(df) <- NULL
+
+# Identify the maximum value for each numeric column
+numeric_cols <- c("KCHI", "CHI", "MAL", "FEM", "SPEECH", "AVG")
+max_values <- apply(df[numeric_cols], 2, max)
+
+# Bold the highest values in each numeric column
+for (col in numeric_cols) {
+  df[[col]] <- ifelse(as.numeric(df[[col]]) == max_values[col], 
+                      paste0("\\textbf{", df[[col]], "}"), 
+                      df[[col]])
+}
+
 apa_table(
   df,
-  caption = "Comparison of Voice Type Classifier (VTC) performance on the ACLEW-Random dataset and the three setups utilizing the ChildLens dataset. The evaluation metrics are reported for the original VTC model (VTC-OG), the VTC fine-tuned on ChildLens (VTC-FT) and the VTC trained from scratch on ChildLens (VTC-CL). The table reports the F1 score per class and the average F1 score (AVG).
-",
-  escape = TRUE,
+  caption = "Comparison of Voice Type Classifier (VTC) performance on the ACLEW-Random dataset and the three setups utilizing the ChildLens dataset. The evaluation metrics are reported for the original VTC model (VTC-OG), the VTC fine-tuned on ChildLens (VTC-FT) and the VTC trained from scratch on ChildLens (VTC-CL). The table reports the F1 score per class and the average F1 score (AVG).",
+  escape = FALSE, # Allow LaTeX commands like \textbf
 )
 ```
 
 ### Evaluation
 Table \@ref(tab:vtc-results) shows \( F_1 \)-scores for three VTC setups on the ChildLens dataset: the original model \( VTC_{og} \), fine-tuned model \( VTC_{ft} \), and model trained from scratch \( VTC_{cl} \), compared to the benchmark dataset. \( VTC_{og} \) scores `r vtc_og_f1`, slightly below the benchmark, with best performance on `KCHI` (`r vtc_og_kchi`) and worst on `CHI` (`r vtc_og_chi`). Fine-tuning \( VTC_{ft} \) training from scratch \( VTC_{cl} \) achieve `r vtc_ft_f1` and `r vtc_cl_f1`, respectively, showing significant improvement. The low `CHI` scores are primarily due to frequent misclassifications as `KCHI`. This likely results from the vocal similarity between the key child and other children in the ChildLens dataset. In many cases, distinguishing between them may rely more on acoustic cues like proximity to the microphone than on vocal characteristics. In contrast, the original VTC dataset includes audio from infants and toddlers, where the distinction between the key child (often babbling or younger) and other speakers is more pronounced, making classification tasks easier. Importantly, these scores are expected to improve as more annotated data becomes available, since annotation is still ongoing. Figure \@ref(fig:vtc-evaluations) visualizes how model predictions compare to the ground truth annotations for the \( VTC_{cl} \) model.
 
-```{r vtc-evaluations, dpi=200, fig.align='center', fig.cap="\\( VTC_{cl} \\) Predictions compared to Ground Truth Annotations", out.width='95%'}
-knitr::include_graphics("images/vtc_performance_evaluation.png")
+```{r vtc-evaluations, dpi=200, fig.align='center', fig.cap="\\( VTC_{cl} \\) Predictions compared to Ground Truth Annotations", out.width='100%'}
+knitr::include_graphics("images/vtc_performance_evaluation_184452.png")
 ```
 
 # General Discussion
@@ -535,7 +560,7 @@ The usefulness of the ChildLens dataset is demonstrated by its successful applic
 
 The integration of visual and auditory data in the ChildLens dataset enables a more detailed and comprehensive understanding of children’s daily experiences. Complex activities such as pretend play and reading a book, which require both audio and video for accurate detection, exemplify the strength of this multimodal approach. While previous studies, such as those analyzing disfluencies in children’s speech during computer game play [@yildirimAutomaticDetectionDisfluency2009], have demonstrated that combining visual and auditory information can improve performance, few studies have explored this in the context of children’s naturalistic activities. With ChildLens, the combination of naturalistic data and multimodal analysis creates new opportunities for in-depth insights into children’s cognitive, emotional, and social development, particularly for activities best captured through both modalities.
 
-Despite its strengths, the ChildLens dataset also has its limitations. First, there is class imbalance, especially in underrepresented activity classes, which could affect model training and evaluation. More frequent activities, such as “child talking” (774 minutes) and “playing with object” (1715), dominate the dataset, whereas less common activities like “dancing” (5 minutes) and “making music” (3 minutes) are scarcely represented. Similarly, activities like “playing without object” (47 minutes) and “watching something” (28 minutes) appear less frequently. This imbalance may lead to skewed model performance, making it harder to accurately classify rare activities. Possible solutions to this challenge could involve merging rare activity classes into broader categories or excluding them from model training, though these approaches may reduce the dataset’s diversity. Other methods, such as resampling or augmentation, could help balance the dataset and improve model performance [@spelmenReviewHandlingImbalanced2018; @alaniClassifyingImbalancedMultimodal2020]. Second, there is sampling bias. Since the recordings are largely influenced by parental decisions about when and how often activities are captured, certain activities or settings may be overrepresented or underrepresented based on these preferences. Furthermore, the dataset primarily focuses on families from a mid-sized German city, limiting its geographic and cultural diversity. Expanding the dataset to include a broader range of families from different regions and cultures would enhance its generalizability and applicability to various research contexts.
+Despite its strengths, the ChildLens dataset also has its limitations. First, there is class imbalance, especially in underrepresented activity classes, which could affect model training and evaluation. More frequent activities, such as “child talking” (774 minutes) and “playing with object” (1715 minutes), dominate the dataset, whereas less common activities like “dancing” (5 minutes) and “making music” (3 minutes) are scarcely represented. Similarly, activities like “playing without object” (47 minutes) and “watching something” (28 minutes) appear less frequently. This imbalance may lead to skewed model performance, making it harder to accurately classify rare activities. Possible solutions to this challenge could involve merging rare activity classes into broader categories or excluding them from model training, though these approaches may reduce the dataset’s diversity. Other methods, such as resampling or augmentation, could help balance the dataset and improve model performance [@spelmenReviewHandlingImbalanced2018; @alaniClassifyingImbalancedMultimodal2020]. Second, there is sampling bias. Since the recordings are largely influenced by parental decisions about when and how often activities are captured, certain activities or settings may be overrepresented or underrepresented based on these preferences. Furthermore, the dataset primarily focuses on families from a mid-sized German city, limiting its geographic and cultural diversity. Expanding the dataset to include a broader range of families from different regions and cultures would enhance its generalizability and applicability to various research contexts.
 
 The study of children’s everyday experiences is crucial for understanding their cognitive, emotional, and social development. These daily interactions provide important insights into how children learn, grow, and engage with their environment. The ChildLens dataset makes a valuable contribution to this field by offering a rich multi-modal resource that captures children’s experiences in naturalistic settings. With its comprehensive annotations and potential to automate the analysis of children’s activities, the dataset enables researchers to develop, fine-tune and apply automized processing algorithms that help to scale-up the study of situated development. By virtue of being an openly accessible resource, the ChildLens dataset creates new opportunities for understanding the complexities of early childhood development and provides a foundation for future research in this area.
 
