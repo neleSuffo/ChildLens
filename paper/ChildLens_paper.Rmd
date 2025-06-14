@@ -212,24 +212,8 @@ In order to obtain a decent coverage for the different activity classes we plann
 - Child is invited to play with toys with someone else (adult or child)
 - Child is invited to draw/craft something
 
-```{r camera-superannotate-activity-classes, echo=FALSE, dpi=600, fig.align='center', fig.cap="\\textbf{A} – Vest with the embedded camera worn by the children, \\textbf{B} – Collage of 9 screenshots showing activities (top left to bottom right): crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play, \\textbf{C} – Activity classes in the ChildLens dataset."}
-img1 <- ggdraw() + draw_image("images/camera_worn_close.png", scale = 0.8)
-img2 <- ggdraw() + draw_image("images/activities_snippets.png", scale = 0.8)
-img3 <- ggdraw() + draw_image("images/ChildLens_activity_classes.png", scale = 1)
-
-# Combine img1 and img2 into the first row with equal heights
-top_row <- (img1 + img2) + 
-  plot_layout(widths = c(0.4, 1))
-
-final_layout <- (top_row / img3) +
-  plot_layout(heights = c(1, 1))  # Adjust row heights if needed
-
-# Add labels (A), (B), (C) to the images
-final_labeled_layout <- final_layout +
-  plot_annotation(tag_levels = 'A')  # Adds "A", "B", "C" automatically
-
-# Display the final layout
-final_labeled_layout
+```{r camera-superannotate-activity-classes, echo=FALSE, dpi=600, fig.align='center', fig.cap="\\textbf{A} – Vest with the embedded camera worn by the children, \\textbf{B} – Collage of 9 screenshots showing activities (top left to bottom right): crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play, \\textbf{C} – Activity classes in the ChildLens dataset.", out.width='100%'}
+knitr::include_graphics("images/dataset_overview.png")
 ```
 
 ## Step 2: Creation of Labeling Strategy
