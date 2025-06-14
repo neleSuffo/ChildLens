@@ -1,0 +1,6 @@
+[submodule "pyannote-audio-train"]
+	path = pyannote-audio-train
+	url = https://github.com/neleSuffo/pyannote-audio-train
+[submodule "mmaction2"]
+	path = mmaction2
+	url = https://github.com/neleSuffo/mmaction2
