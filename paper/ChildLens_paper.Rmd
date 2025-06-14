@@ -211,14 +211,9 @@ In order to obtain a decent coverage for the different activity classes we plann
 - Child is invited to play with toys with someone else (adult or child)
 - Child is invited to draw/craft something
 
-## Step 2: Creation of Labeling Strategy
-To create a comprehensive labeling strategy for the ChildLens dataset, we first defined a list of activities that children typically engage in. This list was inspired by previous research on activities that children are known to participate in [@hofferthHowAmericanChildren2001; @ginsburgImportancePlayPromoting2007]. From this, we derived a detailed catalog of activities that were likely to be captured in the videos and chose to make the activity classes more granular by distinguishing between activities like "making music" and "singing/humming" or "drawing" and "crafting things". 
-
-After an initial review of the videos, we decided to add another class "overheard speech" to capture situations in which the child is not directly involved in a conversation but can hear it. We also added "pretend play" as a separate class to capture situations in which the child is engaged in imaginative play. This approach allowed us to capture the diversity of activities that children engage in and create a comprehensive dataset for activity analysis.
-
-```{r camera-superannotate-activity-classes, echo=FALSE, dpi=600, fig.align='center', fig.cap="\\textbf{A} – Vest with the embedded camera worn by the children, \\textbf{B} – Platform utilized for video annotation, \\textbf{C} – Activity classes in the ChildLens dataset."}
+```{r camera-superannotate-activity-classes, echo=FALSE, dpi=600, fig.align='center', fig.cap="\\textbf{A} – Vest with the embedded camera worn by the children, \\textbf{B} – Collage of 9 screenshots showing activities (top left to bottom right): crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play., \\textbf{C} – Activity classes in the ChildLens dataset."}
 img1 <- ggdraw() + draw_image("images/camera_worn_close.png", scale = 0.8)
-img2 <- ggdraw() + draw_image("images/SuperAnnotate.png", scale = 0.8)
+img2 <- ggdraw() + draw_image("images/activities_snippets.png", scale = 0.8)
 img3 <- ggdraw() + draw_image("images/ChildLens_activity_classes.png", scale = 1)
 
 # Combine img1 and img2 into the first row with equal heights
@@ -235,6 +230,11 @@ final_labeled_layout <- final_layout +
 # Display the final layout
 final_labeled_layout
 ```
+
+## Step 2: Creation of Labeling Strategy
+To create a comprehensive labeling strategy for the ChildLens dataset, we first defined a list of activities that children typically engage in. This list was inspired by previous research on activities that children are known to participate in [@hofferthHowAmericanChildren2001; @ginsburgImportancePlayPromoting2007]. From this, we derived a detailed catalog of activities that were likely to be captured in the videos and chose to make the activity classes more granular by distinguishing between activities like "making music" and "singing/humming" or "drawing" and "crafting things". 
+
+After an initial review of the videos, we decided to add another class "overheard speech" to capture situations in which the child is not directly involved in a conversation but can hear it. We also added "pretend play" as a separate class to capture situations in which the child is engaged in imaginative play. This approach allowed us to capture the diversity of activities that children engage in and create a comprehensive dataset for activity analysis.
 
 ## Step 3: Manual Labeling Process
 Before the actual annotation process, a setup meeting was held to introduce the annotators to the labeling strategy. To familiarize themselves with the task, the annotators were assigned 25 sample videos to practice and gain hands-on experience. These initial annotations were reviewed by the research team, and feedback was provided to refine the approach. A total of three feedback loops were conducted to ensure that the annotators follow the labeling strategy properly.
@@ -301,6 +301,45 @@ apa_table(
 #### Statistics
 The ChildLens dataset comprises of `r sum_videos` video files with a total of `r sum_hours` hours recorded by `r nr_children` children aged 3 to 5 years (M=`r mean_age`, SD=`r sd_age`). This includes `r count_3_plus` videos from children aged 3, `r count_4_plus` videos from children aged 4, and `r count_5_plus` videos from children aged 5. The video duration per child varies between `r min_minutes` and `r max_minutes` minutes (M=`r mean_minutes`, SD=`r sd_minutes`). A detailed distribution of the video duration per child is shown in figure \@ref(fig:minutes-per-child). 
 
+```{r minutes-per-child, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Video recording duration (in minutes) per child ID.", fig.height=2.5, fig.width=3.5}
+unique_data$ID <- as.factor(unique_data$ID)
+
+ggplot(unique_data, aes(x = Minutes_per_ID)) +
+  geom_point(aes(y = 0), shape = "I", size = 4) + 
+  geom_density(fill = "gray", alpha = 0.5, color = "black") + 
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Minutes per ID",
+    y = "Density"
+  )
+
+#unique_data$ID <- as.factor(unique_data$ID)
+
+#plot <- ggplot(unique_data, aes(x = Minutes_per_ID)) +
+#  geom_point(aes(y = 0), shape = "I", size = 5) + 
+#  geom_density(fill = "gray", alpha = 0.5, color = "black") + 
+ # theme_minimal() +
+ # theme(
+  #  legend.position = "none",
+   # axis.title = element_text(size = 25),      # Increase label size
+    #axis.text = element_text(size = 25),       # Increase tick label size
+    #axis.ticks.length = unit(0.5, "cm")        # Increase tick size
+  #) +
+  #labs(
+  #  x = "Minutes per ID",
+  #  y = "Density"
+  #)
+
+# Specify the file path and name
+#output_folder <- "/Users/nelesuffo/Promotion/projects/leuphana-IPE/paper/images" 
+#file_name <- "minutes_per_id_plot.png"
+#file_path <- file.path(output_folder, file_name)
+
+# Save the plot
+#ggsave(filename = file_path, plot = plot, width = 3, height = 2, dpi = 100)
+```
+
 This diverse dataset includes a varying number of instances across the 14 activity classes. While annotations are still ongoing, the current annotations (`r annotation_progress`% annotated) include between 4 and 11295 annotation instances per class. The duration of each instance varies by activity. For example, audio-based activities like "child talking" may last only a few seconds, while activities like "reading a book" can span several minutes. The table with the total number of instances and summed duration for all activity classes is available in the appendix.
 
 ```{r minutes-per-child-density, echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
@@ -350,45 +389,6 @@ file_path <- file.path(output_folder, file_name)
 
 # Save the plot
 ggsave(filename = file_path, plot = plot_age, width = 8, height = 6, dpi = 300)
-```
-
-```{r minutes-per-child, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Video recording duration (in minutes) per child ID.", fig.height=2.5, fig.width=3.5}
-unique_data$ID <- as.factor(unique_data$ID)
-
-ggplot(unique_data, aes(x = Minutes_per_ID)) +
-  geom_point(aes(y = 0), shape = "I", size = 4) + 
-  geom_density(fill = "gray", alpha = 0.5, color = "black") + 
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    x = "Minutes per ID",
-    y = "Density"
-  )
-
-#unique_data$ID <- as.factor(unique_data$ID)
-
-#plot <- ggplot(unique_data, aes(x = Minutes_per_ID)) +
-#  geom_point(aes(y = 0), shape = "I", size = 5) + 
-#  geom_density(fill = "gray", alpha = 0.5, color = "black") + 
- # theme_minimal() +
- # theme(
-  #  legend.position = "none",
-   # axis.title = element_text(size = 25),      # Increase label size
-    #axis.text = element_text(size = 25),       # Increase tick label size
-    #axis.ticks.length = unit(0.5, "cm")        # Increase tick size
-  #) +
-  #labs(
-  #  x = "Minutes per ID",
-  #  y = "Density"
-  #)
-
-# Specify the file path and name
-#output_folder <- "/Users/nelesuffo/Promotion/projects/leuphana-IPE/paper/images" 
-#file_name <- "minutes_per_id_plot.png"
-#file_path <- file.path(output_folder, file_name)
-
-# Save the plot
-#ggsave(filename = file_path, plot = plot, width = 3, height = 2, dpi = 100)
 ```
 
 #### Data Availability
