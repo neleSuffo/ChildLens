@@ -4,3 +4,6 @@
 [submodule "mmaction2"]
 	path = mmaction2
 	url = https://github.com/neleSuffo/mmaction2
+[submodule "voice-type-classifier"]
+	path = voice-type-classifier
+	url = https://github.com/neleSuffo/voice-type-classifier.git
