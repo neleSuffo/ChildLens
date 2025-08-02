@@ -3,4 +3,5 @@
 	url = https://github.com/neleSuffo/mmaction2
 [submodule "voice-type-classifier"]
 	path = voice-type-classifier
-	url = https://github.com/neleSuffo/voice-type-classifier.git
+	url = https://github.com/neleSuffo/voice-type-classifier
+	branch = new_model
