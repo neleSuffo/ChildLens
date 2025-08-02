@@ -3,7 +3,7 @@
 This is the official repository for the **ChildLens** dataset and our associated publication, which introduces a new resource for analyzing children's naturalistic everyday experiences.
 
 <p align="center">
-  <img src="docs/figures/dataset_overview.png" alt="An illustration of the ChildLens dataset components: A – Vest with the integrated camera worn by the children, B – Collage of 9 screenshots showing activities (crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play), C – Activity classes in the ChildLens dataset." style="width:75%;">
+  <img src="docs/dataset_overview.png" alt="An illustration of the ChildLens dataset components: A – Vest with the integrated camera worn by the children, B – Collage of 9 screenshots showing activities (crafting, dancing, drawing, making music, reading a book, watching something, playing with an object, playing without an object, and pretend play), C – Activity classes in the ChildLens dataset." style="width:75%;">
 </p>
 
 ChildLens is a unique egocentric video and audio dataset capturing 109 hours of experiences from 62 children aged three to five years. The recordings were made in children's home environments using a child-friendly vest equipped with a wide-lens camera and a microphone.
