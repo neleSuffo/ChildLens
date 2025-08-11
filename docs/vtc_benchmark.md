@@ -2,11 +2,13 @@
 
 ## Setup
 ```bash
-git clone https://github.com/MarvinLvn/pyannote-audio.git
+cd voice-type-classifier
+conda env create -f vtc.yml
+conda activate pyannote
+
 cd pyannote-audio
 # First activate pyannote environment, then pip install inside the conda environment
 pip install .
-conda activate pyannote
 ```
 
 ---
