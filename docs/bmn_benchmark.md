@@ -142,7 +142,7 @@ $MMACTION2/
 
 **Command:**
 ```bash
-bash tools/dist_train.sh configs/localization/bmn/bmn_2xb8-400x100-9e_childlens-feature.py 1 --work-dir /home/nele_pauline_suffo/outputs/bmn > output.log 2>&1
+bash tools/dist_train.sh configs/localization/bmn/bmn_2xb8-400x100-9e_childlens-feature.py 1 --work-dir ../../outputs/bmn > output.log 2>&1
 ```
 
 **Requires:**
