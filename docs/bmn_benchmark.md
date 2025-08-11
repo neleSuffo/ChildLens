@@ -15,7 +15,7 @@ python generate_combined_annotations.py
 - Individual annotation `.json` files.
 
 **Description:**
-Combines all SuperAnnotate annotations into a single `combined_annotations.json` file, including only the following activities:
+Combines all annotations into a single `combined_annotations.json` file, including only the following activities:
 - `playing_with_object`
 - `reading_a_book`
 - `drawing`
