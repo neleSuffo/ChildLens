@@ -51,11 +51,8 @@ pyannote-audio mlt train --subset=train --to=300 --parallel=16 ${EXP_DIR} ChildL
 export EXP_DIR=/home/nele_pauline_suffo/projects/pyannote-audio-train/tutorials/models/multilabel_detection
 
 export TRN_DIR=${EXP_DIR}/train/ChildLens.SpeakerDiarization.audio.train
-export TRN_DIR=${EXP_DIR}/train/ChildLens_v2.SpeakerDiarization.audio.train
 
 pyannote-audio mlt validate --subset=development --from=0 --to=300 --every=5 ${TRN_DIR} ChildLens.SpeakerDiarization.audio
-
-pyannote-audio mlt validate --subset=development --from=0 --to=300 --every=5 ${TRN_DIR} ChildLens_v2.SpeakerDiarization.audio
 ```
 ---
 
