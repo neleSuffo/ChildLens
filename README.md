@@ -22,7 +22,11 @@ The ChildLens dataset is a powerful tool for advancing computer vision and audio
 
 ### How to use this repository?
 
-1.  **Installation:** Learn how to set up your environment and install the required dependencies.
+### How to use this repository
+
+1. **Clone the repository:** Clone the full repository along with all submodules using:
+   ```bash
+   git clone --recurse-submodules https://github.com/YourOrg/ChildLens.git
 2.  **Dataset Access:** Follow the instructions to access the ChildLens dataset via our institutional repository.
 3.  **Applying the Models:** Replicate the benchmark results by running our provided scripts for:
     - [Temporal Activity Localization (BMN)](./docs/bmn_benchmark.md)
