@@ -37,13 +37,13 @@ The ChildLens paper:
 [1] ChildLens: An Egocentric Video and Audio Dataset for Child Development Research
 
 ```text
-@article{your_paper_citation,
-  title={ChildLens: An Egocentric Video and Audio Dataset for Child Development Research},
-  author={[Your Authors]},
-  journal={arXiv preprint},
-  year={2025},
-  volume={},
-  pages={},
-  eprint={...},
-  eprinttype={arxiv}
+@article{Suffo2025_ChildLens,
+  title        = {ChildLens: An Egocentric Video and Audio Dataset for Activity Analysis in Children},
+  author       = {Nele Pauline Suffo and Pierre-Etienne Martin and Anas Suffo and Daniel Haun and Manuel Bohn},
+  journal      = {OSF Preprint},
+  year         = {2025},
+  volume       = {v1},
+  pages        = {},
+  eprint       = {evkrf_v1},
+  eprinttype   = {osf}
 }
