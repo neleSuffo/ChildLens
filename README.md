@@ -22,8 +22,6 @@ The ChildLens dataset is a powerful tool for advancing computer vision and audio
 
 ### How to use this repository?
 
-### How to use this repository
-
 1. **Clone the repository:** Clone the full repository along with all submodules using:
    ```bash
    git clone --recurse-submodules https://github.com/neleSuffo/ChildLens.git
