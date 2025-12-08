@@ -39,11 +39,12 @@ The ChildLens paper:
 ```text
 @article{Suffo2025_ChildLens,
   title        = {ChildLens: An Egocentric Video and Audio Dataset for Activity Analysis in Children},
-  author       = {Nele Pauline Suffo and Pierre-Etienne Martin and Anas Suffo and Daniel Haun and Manuel Bohn},
+  author       = {Nele Pauline Suffo and Pierre‑Etienne Martin and Anas Suffo and Daniel Haun and Manuel Bohn},
   journal      = {OSF Preprint},
   year         = {2025},
   volume       = {v1},
   pages        = {},
+  doi          = {10.31234/osf.io/evkrf_v1},
   eprint       = {evkrf_v1},
   eprinttype   = {osf}
 }
